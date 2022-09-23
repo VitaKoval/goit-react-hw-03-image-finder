@@ -24,6 +24,7 @@ class App extends Component {
       >
         <Searchbar />
         {this.state.showModal && <Modal onClose={this.toggleModal} />}
+
       </div>
     );
   }

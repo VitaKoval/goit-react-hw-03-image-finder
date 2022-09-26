@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button } from "../ui/Button";
+import { ButtonLoadMore } from "../ui/Button";
 
 export const Button = () => {
-    return <Button type='button'>Load more</Button>
+    return <ButtonLoadMore type='button'>Load more</ButtonLoadMore>
 }

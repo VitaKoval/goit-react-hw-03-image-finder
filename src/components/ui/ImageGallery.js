@@ -14,5 +14,8 @@ display: grid;
 ` 
 
 export const GaleryTitle = styled.h3`
-text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+
 `

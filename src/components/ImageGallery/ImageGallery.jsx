@@ -1,33 +1,16 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import getImagePixabay from '../services/imagesAPI';
 import { Gallery, GaleryTitle } from '../ui/ImageGallery';
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
-
-axios.defaults.baseURL = 'https://pixabay.com/api/';
-axios.defaults.params = {
-  key: '29605366-6e90110b2388a1c27ba35efcd',
-  image_type: 'photo',
-  orientation: 'horizontal',
-  per_page: '12',
-};
-
-async function getImagePixabay(pageNamber, keyword) {
-  try {
-    const { data } = await axios.get(``, {
-      params: {
-        page: pageNamber,
-        q: keyword,
-      },
-    });
-    console.log('data', data);
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
-}
+import { LoaderSpiner } from '../Loader/Loader';
 
 class ImageGallery extends Component {
-  state = { images: [], status: 'idle', pageNamber: 1, total: 0, };
+  state = {
+    images: [],
+    status: 'idle',
+    pageNamber: 1,
+    total: 0,
+  };
 
   componentDidUpdate(prevProps, prevState) {
     // если предыдущее ключевое слово(из пропа) не равно текущему ключевому слову (из пропа)
@@ -37,7 +20,7 @@ class ImageGallery extends Component {
 
       getImagePixabay(this.state.pageNamber, this.props.keyword)
         .then(({ hits, total }) => {
-          console.log(hits);
+          // console.log(hits);
           if (total === 0) {
             return this.setState({ status: 'rejected' });
           }
@@ -48,24 +31,33 @@ class ImageGallery extends Component {
   }
 
   render() {
-    if (this.state.status === 'idle') {
+    const { images, status, total } = this.state;
+    const { keyword } = this.props;
+
+    if (status === 'idle') {
       return <GaleryTitle>Enter a keyword to search...</GaleryTitle>;
     }
 
-    if (this.state.status === 'pending') {
-      return <GaleryTitle>Search...</GaleryTitle>;
+    if (status === 'pending') {
+      return (
+        <GaleryTitle>
+          <LoaderSpiner /> Search...
+        </GaleryTitle>
+      );
     }
 
-    if (this.state.status === 'rejected') {
+    if (status === 'rejected') {
       return <GaleryTitle>Not found... Try another keyword</GaleryTitle>;
     }
 
-    if (this.state.status === 'resolved') {
+    if (status === 'resolved') {
       return (
         <>
-          <GaleryTitle> Found { this.state.total} images by keyword '{this.props.keyword}'</GaleryTitle>
+          <GaleryTitle>
+            Found {total} images by keyword '{keyword}'
+          </GaleryTitle>
           <Gallery>
-            <ImageGalleryItem images={this.state.images} />
+            <ImageGalleryItem images={images} />
           </Gallery>
         </>
       );

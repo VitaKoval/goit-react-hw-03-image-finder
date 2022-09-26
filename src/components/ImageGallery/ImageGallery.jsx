@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import getImagePixabay from '../services/imagesAPI';
+import Modal from '../Modal/Modal';
 import { Gallery, GaleryTitle } from '../ui/ImageGallery';
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
 import { LoaderSpiner } from '../Loader/Loader';
 
 class ImageGallery extends Component {
   state = {
+    showModal: false,
     images: [],
     status: 'idle',
     pageNamber: 1,
     total: 0,
+    largeImage: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -29,6 +32,15 @@ class ImageGallery extends Component {
         .catch(error => this.setState({ status: 'rejected' }));
     }
   }
+
+  //   toggleModal = () => {
+  //   this.setState(prevState => ({ showModal: !prevState.showModal }));
+  // };
+  openModal = (img) => { console.log("click")
+    this.setState({ showModal: true, largeImage: img })
+
+  }
+  closeModal=() => {this.setState({showModal: false})}
 
   render() {
     const { images, status, total } = this.state;
@@ -57,8 +69,9 @@ class ImageGallery extends Component {
             Found {total} images by keyword '{keyword}'
           </GaleryTitle>
           <Gallery>
-            <ImageGalleryItem images={images} />
+            <ImageGalleryItem images={images} onOpenModal = {this.openModal} />
           </Gallery>
+            {this.state.showModal && <Modal onCloseModal={this.closeModal} largeImage={this.state.largeImage} />}
         </>
       );
     }

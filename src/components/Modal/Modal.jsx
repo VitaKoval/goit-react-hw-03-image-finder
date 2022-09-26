@@ -17,13 +17,13 @@ class Modal extends Component {
   hendleKeyDown = evt => {
     if (evt.code === 'Escape') {
       console.log('Нажали на ESC нужно акрыть модалку!');
-      this.props.onClose();
+      this.props.onCloseModal();
     }
   };
 
   hendleOverlayClick = evt => {
     if (evt.currentTarget === evt.target) {
-      this.props.onClose();
+      this.props.onCloseModal();
     }
   };
 
@@ -31,7 +31,7 @@ class Modal extends Component {
     return createPortal(
       <Overlay onClick={this.hendleOverlayClick}>
         <ModalWindow>
-          <img src="" alt="" />
+          <img src={this.props.largeImage} alt="" />
         </ModalWindow>
       </Overlay>,
       modalRoot

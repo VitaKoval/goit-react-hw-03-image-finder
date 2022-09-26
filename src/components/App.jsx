@@ -8,8 +8,6 @@ import ImageGallery from './ImageGallery/ImageGallery';
 class App extends Component {
   state = {
     keyword: '',
-    // потом можно убрать и заменить на другую проверку!
-    showModal: true,
   };
 
   handleSearchFormSubmit = keyword => {
@@ -17,9 +15,7 @@ class App extends Component {
     this.setState({ keyword });
   };
 
-  toggleModal = () => {
-    this.setState(prevState => ({ showModal: !prevState.showModal }));
-  };
+
 
   render() {
     return (

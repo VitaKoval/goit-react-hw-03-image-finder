@@ -12,3 +12,7 @@ display: grid;
   margin-left: auto;
   margin-right: auto;
 ` 
+
+export const GaleryTitle = styled.h3`
+text-align: center;
+`

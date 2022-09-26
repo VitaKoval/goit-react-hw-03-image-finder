@@ -1,11 +1,11 @@
 import React from 'react';
-import { GalleryItem, GalleryItemImage } from "../ui/ImageGalleryItem";
+import { GalleryItem, GalleryItemImage } from '../ui/ImageGalleryItem';
 
-export const ImageGalleryItem = () => {
-  return (
-    <GalleryItem class="gallery-item">
-      <GalleryItemImage src="" alt="" />
+export const ImageGalleryItem = ({images}) => {
+  console.log(images)
+  return images.map(({ id, webformatURL, largeImageURL, tags }) => (
+    <GalleryItem key={id} id={id}>
+      <GalleryItemImage src={webformatURL} alt={tags} />
     </GalleryItem>
-  );
+  ));
 };
-

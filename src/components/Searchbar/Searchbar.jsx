@@ -1,24 +1,55 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-import { Header, SearchForm, SearchFormButton, SearchFormInput, IconSearch } from "../ui/Searchbar";
+import {
+  Header,
+  SearchForm,
+  SearchFormButton,
+  SearchFormInput,
+  IconSearch,
+} from '../ui/Searchbar';
+// import { toast } from 'react-toastify';
 
-export const Searchbar = () => {
-  return (
-    <Header>
-      <SearchForm>
-        <SearchFormButton type="submit">
-         <IconSearch />
-        </SearchFormButton>
+class Searchbar extends Component {
+  state = {
+    keyword: '',
+  };
 
-        <SearchFormInput
-          type="text"
-          autocomplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
-      </SearchForm>
-    </Header>
-  );
-};
+  handleKeywordChange = evt => {
+    this.setState({ keyword: evt.currentTarget.value });
+  };
+
+  handleSubmit = evt => {
+    evt.preventDefault();
+
+    if (this.state.keyword.trim() === '') {
+      alert('Enter keywor for search!');
+      return;
+    }
+
+    this.props.onSubmit(this.state.keyword);
+    this.setState({ keyword: '' });
+  };
+
+  render() {
+    return (
+      <Header>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchFormButton type="submit">
+            <IconSearch />
+          </SearchFormButton>
+
+          <SearchFormInput
+            type="text"
+            autocomplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            value={this.state.keyword}
+            onChange={this.handleKeywordChange}
+          />
+        </SearchForm>
+      </Header>
+    );
+  }
+}
 
 export default Searchbar;

@@ -27,7 +27,7 @@ class ImageGallery extends Component {
     ) {
       // console.log('делаем запросс на сервер!');
       prevProps.keyword !== this.props.keyword
-        ? this.setState({ status: 'pending', pageNumber: 1 })
+        ? this.setState({ images: [], status: 'pending', pageNumber: 1 })
         : this.setState({ status: 'pending' });
 
       getImagePixabay(this.state.pageNumber, this.props.keyword)
@@ -55,6 +55,11 @@ class ImageGallery extends Component {
 
   loadMore = () => {
     this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
+
+    window.scrollTo({
+      top: 1200,
+      behavior: 'smooth',
+    });
   };
 
   render() {

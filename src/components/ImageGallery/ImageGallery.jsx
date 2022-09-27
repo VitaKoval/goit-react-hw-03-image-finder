@@ -21,9 +21,14 @@ class ImageGallery extends Component {
     // console.log(prevState.pageNumber);
 
     // если меняется ключевое слово
-    if (prevProps.keyword !== this.props.keyword) {
+    if (
+      prevProps.keyword !== this.props.keyword ||
+      prevState.pageNumber !== this.state.pageNumber
+    ) {
       // console.log('делаем запросс на сервер!');
-      this.setState({ status: 'pending', pageNumber: 1 });
+      prevProps.keyword !== this.props.keyword
+        ? this.setState({ status: 'pending', pageNumber: 1 })
+        : this.setState({ status: 'pending' });
 
       getImagePixabay(this.state.pageNumber, this.props.keyword)
         .then(({ hits, total }) => {
@@ -32,29 +37,10 @@ class ImageGallery extends Component {
             return this.setState({ status: 'rejected' });
           }
           return this.setState({
-            images: hits,
+            images: [...this.state.images, ...hits],
             status: 'resolved',
             total,
           });
-        })
-        .catch(error => this.setState({ status: 'rejected' }));
-    }
-
-    // если меняется страница запроса
-    if (prevState.pageNumber !== this.state.pageNumber) {
-      console.log('нажали на LoadMore');
-      this.setState({ status: 'pending' });
-
-      getImagePixabay(this.state.pageNumber, this.props.keyword)
-        .then(({ hits, total }) => {
-          // console.log(hits);
-          if (total === 0) {
-            return this.setState({ status: 'rejected' });
-          }
-          return this.setState(({ images }) => ({
-            images: [...images, ...hits],
-            status: 'resolved',
-          }));
         })
         .catch(error => this.setState({ status: 'rejected' }));
     }
@@ -70,11 +56,6 @@ class ImageGallery extends Component {
   loadMore = () => {
     this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
   };
-
-  // calculateLoadPage = () => {
-  //   const totalPage = Math.ceil(this.state.total / 12);
-  //   return totalPage > this.state.pageNumber;
-  // };
 
   render() {
     const { images, status, total } = this.state;
@@ -120,6 +101,6 @@ class ImageGallery extends Component {
 
 ImageGallery.propTypes = {
   keyword: PropTypes.string.isRequired,
-}
+};
 
 export default ImageGallery;

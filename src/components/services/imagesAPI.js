@@ -16,7 +16,7 @@ async function getImagePixabay(pageNamber, keyword) {
         q: keyword,
       },
     });
-    // console.log('data', data);
+    console.log('data', data);
     return data;
   } catch (error) {
     console.error(error);

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types'
+
 import { ButtonLoadMore } from '../ui/Button';
 
 export const Button = ({ loadMore }) => {
@@ -8,3 +10,7 @@ export const Button = ({ loadMore }) => {
     </ButtonLoadMore>
   );
 };
+
+Button.propTypes = {
+  loadMore: PropTypes.func,
+}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import getImagePixabay from '../services/imagesAPI';
 import Modal from '../Modal/Modal';
 import { Gallery, GaleryTitle } from '../ui/ImageGallery';
@@ -18,16 +19,30 @@ class ImageGallery extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     // console.log(prevState.pageNumber);
+
+    // если меняется ключевое слово
     if (prevProps.keyword !== this.props.keyword) {
-      this.setState({ pageNumber: 1 });
+      // console.log('делаем запросс на сервер!');
+      this.setState({ status: 'pending', pageNumber: 1 });
+
+      getImagePixabay(this.state.pageNumber, this.props.keyword)
+        .then(({ hits, total }) => {
+          // console.log(hits);
+          if (total === 0) {
+            return this.setState({ status: 'rejected' });
+          }
+          return this.setState({
+            images: hits,
+            status: 'resolved',
+            total,
+          });
+        })
+        .catch(error => this.setState({ status: 'rejected' }));
     }
 
-    // если предыдущее ключевое слово(из пропа) не равно текущему ключевому слову (из пропа) или сравнить предыдущий pageNumber и текущий
-    if (
-      prevProps.keyword !== this.props.keyword ||
-      prevState.pageNumber !== this.state.pageNumber
-    ) {
-      // console.log('делаем запросс на сервер!');
+    // если меняется страница запроса
+    if (prevState.pageNumber !== this.state.pageNumber) {
+      console.log('нажали на LoadMore');
       this.setState({ status: 'pending' });
 
       getImagePixabay(this.state.pageNumber, this.props.keyword)
@@ -36,18 +51,15 @@ class ImageGallery extends Component {
           if (total === 0) {
             return this.setState({ status: 'rejected' });
           }
-          return this.setState({ images: hits, status: 'resolved', total });
+          return this.setState(({ images }) => ({
+            images: [...images, ...hits],
+            status: 'resolved',
+          }));
         })
         .catch(error => this.setState({ status: 'rejected' }));
     }
-    
   }
 
-  
-
-  //   toggleModal = () => {
-  //   this.setState(prevState => ({ showModal: !prevState.showModal }));
-  // };
   openModal = img => {
     this.setState({ showModal: true, largeImage: img });
   };
@@ -59,11 +71,10 @@ class ImageGallery extends Component {
     this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
   };
 
-  calculateLoadPage = () => {
-    const totalPage = Math.ceil(this.state.total / 12);
-
-    return totalPage > this.state.pageNumber;
-  };
+  // calculateLoadPage = () => {
+  //   const totalPage = Math.ceil(this.state.total / 12);
+  //   return totalPage > this.state.pageNumber;
+  // };
 
   render() {
     const { images, status, total } = this.state;
@@ -86,7 +97,6 @@ class ImageGallery extends Component {
     }
 
     if (status === 'resolved') {
-      // console.log(this.calculateLoadPage());
       return (
         <>
           <GaleryTitle>
@@ -95,7 +105,7 @@ class ImageGallery extends Component {
           <Gallery>
             <ImageGalleryItem images={images} onOpenModal={this.openModal} />
           </Gallery>
-          {this.calculateLoadPage() && <Button loadMore={this.loadMore} />}
+          {total > images.length && <Button loadMore={this.loadMore} />}
           {this.state.showModal && (
             <Modal
               onCloseModal={this.closeModal}
@@ -107,4 +117,9 @@ class ImageGallery extends Component {
     }
   }
 }
+
+ImageGallery.propTypes = {
+  keyword: PropTypes.string.isRequired,
+}
+
 export default ImageGallery;

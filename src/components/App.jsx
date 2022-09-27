@@ -15,8 +15,6 @@ class App extends Component {
     this.setState({ keyword });
   };
 
-
-
   render() {
     return (
       <div
@@ -29,7 +27,6 @@ class App extends Component {
       >
         <Searchbar onSubmit={this.handleSearchFormSubmit} />
         <ImageGallery keyword={this.state.keyword} />
-        {/* {this.state.showModal && <Modal onClose={this.toggleModal} />} */}
         {/* <ToastContainer/> */}
       </div>
     );

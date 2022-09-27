@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { BiSearchAlt } from "react-icons/bi";
+import { BiSearchAlt } from 'react-icons/bi';
 
 export const Header = styled.header`
   top: 0;
@@ -42,7 +42,7 @@ export const SearchFormButton = styled.button`
   padding: 0;
 
   &:hover {
-      opacity: 1;
+    opacity: 1;
   }
 `;
 
@@ -63,6 +63,6 @@ export const SearchFormInput = styled.input`
 `;
 
 export const IconSearch = styled(BiSearchAlt)`
-width: 30px;
-height: 30px;
-`
+  width: 30px;
+  height: 30px;
+`;

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const Gallery = styled.ul`
-display: grid;
+  display: grid;
   max-width: calc(100vw - 48px);
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   grid-gap: 16px;
@@ -11,11 +11,10 @@ display: grid;
   list-style: none;
   margin-left: auto;
   margin-right: auto;
-` 
+`;
 
 export const GaleryTitle = styled.h3`
-display: flex;
-align-items: center;
-justify-content: center;
-
-`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

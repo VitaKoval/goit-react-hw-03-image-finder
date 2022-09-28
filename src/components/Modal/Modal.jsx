@@ -8,7 +8,7 @@ const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component {
   componentDidMount() {
-    console.log('Загрузилась модалка');
+    // console.log('Загрузилась модалка');
     window.addEventListener('keydown', this.hendleKeyDown);
   }
 
@@ -18,7 +18,7 @@ class Modal extends Component {
 
   hendleKeyDown = evt => {
     if (evt.code === 'Escape') {
-      console.log('Нажали на ESC нужно акрыть модалку!');
+      // console.log('Нажали на ESC нужно акрыть модалку!');
       this.props.onCloseModal();
     }
   };

@@ -20,7 +20,7 @@ class ImageGallery extends Component {
   componentDidUpdate(prevProps, prevState) {
     // console.log(prevState.pageNumber);
 
-    // если меняется ключевое слово
+    // если меняется ключевое слово ИЛИ номер страницы для запроса
     if (
       prevProps.keyword !== this.props.keyword ||
       prevState.pageNumber !== this.state.pageNumber
@@ -28,7 +28,7 @@ class ImageGallery extends Component {
       // console.log('делаем запросс на сервер!');
       prevProps.keyword !== this.props.keyword
         ? this.setState({ images: [], status: 'pending', pageNumber: 1 })
-        : this.setState({ status: 'pending' });
+        : this.setState({ status: 'resolved' });
 
       getImagePixabay(this.state.pageNumber, this.props.keyword)
         .then(({ hits, total }) => {
@@ -56,10 +56,10 @@ class ImageGallery extends Component {
   loadMore = () => {
     this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
 
-    window.scrollTo({
-      top: 1200,
-      behavior: 'smooth',
-    });
+    // window.scrollTo({
+    //   top: this.state.images.length * 260 ,
+    //   behavior: 'smooth',
+    // });
   };
 
   render() {
@@ -77,6 +77,7 @@ class ImageGallery extends Component {
         </GaleryTitle>
       );
     }
+    // {(status === 'pending') && <GaleryTitle><LoaderSpiner /> Search...</GaleryTitle>}
 
     if (status === 'rejected') {
       return <GaleryTitle>Not found... Try another keyword</GaleryTitle>;
@@ -91,6 +92,7 @@ class ImageGallery extends Component {
           <Gallery>
             <ImageGalleryItem images={images} onOpenModal={this.openModal} />
           </Gallery>
+
           {total > images.length && <Button loadMore={this.loadMore} />}
           {this.state.showModal && (
             <Modal

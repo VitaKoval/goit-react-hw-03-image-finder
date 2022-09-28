@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import getImagePixabay from '../services/imagesAPI';
+import getImagePixabay from '../../services/imagesAPI';
 import Modal from '../Modal/Modal';
 import { Gallery, GaleryTitle } from '../ui/ImageGallery';
 import { ImageGalleryItem } from '../ImageGalleryItem/ImageGalleryItem';
@@ -66,45 +66,77 @@ class ImageGallery extends Component {
     const { images, status, total } = this.state;
     const { keyword } = this.props;
 
-    if (status === 'idle') {
-      return <GaleryTitle>Enter a keyword to search...</GaleryTitle>;
-    }
 
-    if (status === 'pending') {
-      return (
-        <GaleryTitle>
-          <LoaderSpiner /> Search...
-        </GaleryTitle>
-      );
-    }
-    // {(status === 'pending') && <GaleryTitle><LoaderSpiner /> Search...</GaleryTitle>}
+    // return (
+    //   <>
+    //     {status === 'idle' && (
+    //       <GaleryTitle>Enter a keyword to search...</GaleryTitle>
+    //     )}
+    //     {status === 'pending' && (
+    //       <GaleryTitle>
+    //         <LoaderSpiner /> Search...{' '}
+    //       </GaleryTitle>
+    //     )}
+    //     {status === 'rejected' && (
+    //       <>
+    //         <GaleryTitle>
+    //           Found {total} images by keyword '{keyword}'
+    //         </GaleryTitle>
+    //         <Gallery>
+    //           <ImageGalleryItem images={images} onOpenModal={this.openModal} />
+    //         </Gallery>
+    //         {total > images.length && <Button loadMore={this.loadMore} />}
+    //         {this.state.showModal && (
+    //           <Modal
+    //             onCloseModal={this.closeModal}
+    //             largeImage={this.state.largeImage}
+    //           />
+    //         )}
+    //       </>
+    //     )}
+    //   </>
+    // );
 
-    if (status === 'rejected') {
-      return <GaleryTitle>Not found... Try another keyword</GaleryTitle>;
-    }
+      if (status === 'idle') {
+        return <GaleryTitle>Enter a keyword to search...</GaleryTitle>;
+      }
 
-    if (status === 'resolved') {
-      return (
-        <>
+      if (status === 'pending') {
+        return (
           <GaleryTitle>
-            Found {total} images by keyword '{keyword}'
+            <LoaderSpiner /> Search...
           </GaleryTitle>
-          <Gallery>
-            <ImageGalleryItem images={images} onOpenModal={this.openModal} />
-          </Gallery>
+        );
+      }
+      // {(status === 'pending') && <GaleryTitle><LoaderSpiner /> Search...</GaleryTitle>}
 
-          {total > images.length && <Button loadMore={this.loadMore} />}
-          {this.state.showModal && (
-            <Modal
-              onCloseModal={this.closeModal}
-              largeImage={this.state.largeImage}
-            />
-          )}
-        </>
-      );
+      if (status === 'rejected') {
+        return <GaleryTitle>Not found... Try another keyword</GaleryTitle>;
+      }
+
+      if (status === 'resolved') {
+        return (
+          <>
+            <GaleryTitle>
+              Found {total} images by keyword '{keyword}'
+            </GaleryTitle>
+            <Gallery>
+              <ImageGalleryItem images={images} onOpenModal={this.openModal} />
+            </Gallery>
+
+            {total > images.length && <Button loadMore={this.loadMore} />}
+            {this.state.showModal && (
+              <Modal
+                onCloseModal={this.closeModal}
+                largeImage={this.state.largeImage}
+              />
+            )}
+          </>
+        );
+      }
     }
   }
-}
+
 
 ImageGallery.propTypes = {
   keyword: PropTypes.string.isRequired,
